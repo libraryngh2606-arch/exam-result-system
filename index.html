@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Exam Search</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+<h1>🎓 Student Result Portal</h1>
+
+<input id="enrlno" placeholder="Enter ENRLNO">
+<button onclick="search()">Search</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+function search(){
+ let e = document.getElementById("enrlno").value;
+
+ fetch("/search?enrlno="+e)
+ .then(r=>r.json())
+ .then(d=>{
+  let out=document.getElementById("result");
+
+  if(d.error){out.innerHTML=d.error;return;}
+
+  let html="<table>";
+
+  for(let k in d){
+    html+=`<tr><td>${k}</td><td>${d[k]}</td></tr>`;
+  }
+
+  html+="</table>";
+
+  html+= `<br><a href='/download?enrlno=${e}'>
+            <button>⬇ Download PDF</button>
+          </a>`;
+
+  out.innerHTML=html;
+ })
+}
+</script>
+
+</body>
+</html>
